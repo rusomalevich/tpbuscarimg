@@ -12,16 +12,18 @@ function App() {
   useEffect(()=>{
     const obtenerImagenes=async ()=> {
       const response = await axios.get(`${BASEurl}?client_id=${apiKey}&query=${busqueda}`)
-      console.log(response)
+      const datos=response.data
+      setImagenes(datos.results)
     }
     obtenerImagenes()
-  }
-
+  }, []
+    
   )
 
   return (
     <div>
       <h1>Holus</h1>
+      {imagenes.map((elemento) => <h2>{elemento.alt_description}</h2>)}
     </div>
   )
 }
