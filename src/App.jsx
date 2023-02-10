@@ -13,7 +13,6 @@ function App() {
   const busquedaRef=useRef(null)
   const [busqueda, setBusqueda] = useState(null)
 
-  
   useEffect(()=>{
     const obtenerImagenes=async ()=> {
       
@@ -59,9 +58,10 @@ function App() {
               src={elemento.urls.small_s3} 
               alt={elemento.alt_description} 
             />
-            <p>{/*agregar condicional para que no renderice el P si no hay location*/}
-              {elemento.user.location}
-            </p>
+          {/*Si hay ubicación, la muestra*/}
+          {(elemento.user.location?
+          (<p>{elemento.user.location}</p>)
+          :null)}
         </div>
         )}
       </div>
