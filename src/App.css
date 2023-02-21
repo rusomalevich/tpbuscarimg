@@ -1,7 +1,209 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap');
+:root {
+  --tipo: 'Figtree',sans-serif;
+  --colorPrincipal: #0000FF;
+  --colorResaltado: #6DF5D5;
+  --sombra: 0px -3px 16px 0px rgb(0 0 0 / 20%);
+  --sombraOscura: 0px -3px 16px 0px rgb(0 0 0 / 40%);
+  --gris:#7e7e7e;
+  --grisMedio: #3f3f3f;
+  --grisOscuro: #272727;
+}
+
+a, a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+body, input::placeholder, button {
+  font-family: var(--tipo);
+}
 #root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
 
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.buscador{
+  width: 50%;
+  position: relative;
+  padding: 2em 0;
+}
+
+.inputBuscar {
+  width: 100%;
+  line-height: 30px;
+  padding: .7em;
+  border-radius: 20px;
+  border: 0px;
+  box-shadow: var(--sombra);
+  font-size: 1.2em;
+  text-align: center;
+  font-weight: 600;
+  color: var(--grisMedio);
+  letter-spacing: .2px;
+  transition: .3s box-shadow;
+}
+
+.inputBuscar::placeholder {
+  /*font-size: 1.2em;*/
+  text-align: center;
+  font-weight: 400;
+}
+
+.inputBuscar:focus {
+  box-shadow: var(--sombraOscura);
+}
+
+.inputBuscar::-webkit-search-cancel-button {
+  position: relative;
+  right: 40px;
+  color: var(--gris);
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-left: 10px;
+  background:
+    linear-gradient(45deg, rgba(75, 75, 75, 0) 0%, rgba(75, 75, 75, 0) 43%, var(--grisMedio) 45%, var(--grisMedio) 55%, rgba(75, 75, 75, 0) 57%, rgba(75, 75, 75, 0) 100%),
+    linear-gradient(135deg, transparent 0%, transparent 43%, var(--grisMedio) 45%, var(--grisMedio) 55%, transparent 57%, transparent 100%);
+}
+
+/*Para la versión DARK*/
+/*
+    background: linear-gradient(45deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 43%, #fff 45%, #fff 55%, rgba(0, 0, 0, 0) 57%, rgba(0, 0, 0, 0) 100%),
+    linear-gradient(135deg, transparent 0%, transparent 43%, #fff 45%, #fff 55%, transparent 57%, transparent 100%);
+    }
+*/
+
+.inputBuscar::-ms-clear {
+  margin-right: 40px
+}
+
+input {
+  outline-width: 0;
+  outline-color: transparent;
+}
+
+.botonBuscar {
+  padding: 1em;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  transition: right .3s;
+}
+
+.botonBuscar > svg{
+  font-size: 2em;
+  color:var(--gris);
+  transition: .3s;
+}
+
+
+.botonBuscar > svg:hover{
+  color: var(--colorPrincipal);
+}
+
+
+
+.my-masonry-grid {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-left: -30px;
+  width: auto;
+}
+
+.my-masonry-grid_column {
+  padding-left: 30px;
+  background-clip: padding-box;
+}
+
+.card {
+  margin-bottom: 30px;
+  box-shadow: var(--sombra);
+  transition: .3s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.my-masonry-grid .foto {
+  width: 100%;
+}
+
+.datosFoto {
+  padding:1em 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:.5em;
+}
+
+.propiedades {
+      font-size: 0.8em;
+}
+
+.propiedades > span {
+  font-weight: 600;
+}
+
+.propiedades > p {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+}
+.propiedades svg {
+  color:var(--colorPrincipal);
+}
+
+.etiquetas {
+  display: flex;
+  gap: .5em;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Agregar un ícono para location y para user */
+
+.etiqueta {
+  text-transform: capitalize;
+  padding:.5em;
+  background: var(--colorResaltado);
+  border-radius: 8px;
+  transition: .3s;
+  display: flex;
+  gap: .2em;
+  align-items: center;
+}
+
+.etiqueta:hover {
+  background-color:var(--colorPrincipal);
+  color:white;
+}
+
+.creditos {
+  text-decoration: underline;
+  display: flex;
+  align-items: center;
+  gap: .1em;
+}
+
+.creditos:hover {
+  text-decoration: none;
+}
