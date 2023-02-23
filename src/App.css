@@ -5,6 +5,7 @@
   --colorResaltado: #6DF5D5;
   --sombra: 0px -3px 16px 0px rgb(0 0 0 / 20%);
   --sombraOscura: 0px -3px 16px 0px rgb(0 0 0 / 40%);
+  --blanco: rgba(256, 256, 256, 70%);
   --gris:#7e7e7e;
   --grisMedio: #3f3f3f;
   --grisOscuro: #272727;
@@ -17,24 +18,46 @@ a, a:visited {
 
 body, input::placeholder, button {
   font-family: var(--tipo);
+  height: 100%;
+  width: 100%;
+  margin:0;
+  padding: 0;
 }
+
+body {
+  transition: background-color .3s;
+}
+
 #root {
   display: flex;
   flex-direction: column;
   align-items: center;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
+
+.fondo {
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  position: fixed;
+  left: 0;
+  right:0;
+  margin:0 auto;
+  z-index: -1;
+  background-size: cover;
+  background-position: center center;
+  transition:.3s;
+}
 
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-top: 2em;
 }
-
 
 .buscador{
   width: 50%;
@@ -55,6 +78,7 @@ body, input::placeholder, button {
   color: var(--grisMedio);
   letter-spacing: .2px;
   transition: .3s box-shadow;
+  background-color: var(--blanco);
 }
 
 .inputBuscar::placeholder {
@@ -97,12 +121,14 @@ input {
 }
 
 .botonBuscar {
+  right: 0;
+  width: 50px;
+  top: 4px;
   padding: 1em;
   background: transparent;
   border: none;
   cursor: pointer;
   position: absolute;
-  right: 0;
   transition: right .3s;
 }
 
@@ -136,6 +162,7 @@ input {
   margin-bottom: 30px;
   box-shadow: var(--sombra);
   transition: .3s;
+  background: var(--blanco);
 }
 
 .card:hover {
@@ -146,8 +173,9 @@ input {
   width: 100%;
 }
 
+
 .datosFoto {
-  padding:1em 2em;
+  padding:1em;
   display: flex;
   flex-direction: column;
   align-items: center;

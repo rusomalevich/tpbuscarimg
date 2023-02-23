@@ -3,6 +3,7 @@ import './App.css'
 import axios from 'axios'
 import Masonry from 'react-masonry-css'
 import { BsSearch, BsFillTagFill, BsFillMapFill, BsFillPersonFill } from "react-icons/bs";
+import { Logo } from './components/Logo/Logo'
 
 let idFotos=[]
 
@@ -25,15 +26,6 @@ function App() {
     900: 2,
     700: 1
   };
-
-  /*
-    const breakpointColumnsObj = {
-    default: 3,
-    1100: 2,
-    700: 1,
-    500: 1
-  };
-  */
 
   useEffect(()=>{
     const obtenerImagenes=async ()=> {
@@ -83,16 +75,33 @@ function App() {
 
 
     const buscar=(tag)=>{
-      if (busquedaRef.current.value != ""){
+      if (tag) {
+        setBusqueda(tag)
+
+      } else if (busquedaRef.current.value != ''){
         setBusqueda(busquedaRef.current.value)
       }
-      if(tag != ""){
-        setBusqueda(tag)
-      }
+      console.log(busqueda)
     }
 
+  const [bgColor, setbgColor] = useState(null);
+  
+  const handleMouseEnter = (imgColor) => {
+    setbgColor(imgColor)
+    document.body.style.background = imgColor;
+  };
+  const handleMouseLeave = () => {
+    document.body.style.background = "var(--gris)";
+  };
+
+
+
   return (
-    <div className='container'>
+    <div 
+      className='container'
+      >
+
+      < Logo />
       <div className='buscador'>
         <input
           ref={busquedaRef}
@@ -117,6 +126,8 @@ function App() {
           key={elemento.id}
           id={elemento.id}
           className='card'
+          onMouseEnter={() => handleMouseEnter(elemento.color)}
+          onMouseLeave={handleMouseLeave}
         >
           <img
             src={elemento.urls.small_s3}
