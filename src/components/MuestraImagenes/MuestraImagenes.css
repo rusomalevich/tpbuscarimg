@@ -56,8 +56,6 @@
     flex-wrap: wrap;
 }
 
-/* Agregar un ícono para location y para user */
-
 .etiqueta {
     text-transform: capitalize;
     padding: .5em;
