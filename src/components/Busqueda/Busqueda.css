@@ -81,3 +81,9 @@ input {
 .botonBuscar>svg:hover {
     color: var(--colorPrincipal);
 }
+
+@media (max-width:700px) {
+    .buscador {
+        width: 90%;
+    }
+}
