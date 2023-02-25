@@ -1,0 +1,83 @@
+.buscador {
+    width: 50%;
+    position: relative;
+    padding: 2em 0;
+}
+
+.inputBuscar {
+    width: 100%;
+    line-height: 30px;
+    padding: .7em;
+    border-radius: 20px;
+    border: 0px;
+    box-shadow: var(--sombra);
+    font-size: 1.2em;
+    text-align: center;
+    font-weight: 600;
+    color: var(--grisMedio);
+    letter-spacing: .2px;
+    transition: .3s box-shadow;
+    background-color: var(--blanco);
+}
+
+.inputBuscar::placeholder {
+    /*font-size: 1.2em;*/
+    text-align: center;
+    font-weight: 400;
+}
+
+.inputBuscar:focus {
+    box-shadow: var(--sombraOscura);
+}
+
+.inputBuscar::-webkit-search-cancel-button {
+    position: relative;
+    right: 40px;
+    color: var(--gris);
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    margin-left: 10px;
+    background:
+        linear-gradient(45deg, rgba(75, 75, 75, 0) 0%, rgba(75, 75, 75, 0) 43%, var(--grisMedio) 45%, var(--grisMedio) 55%, rgba(75, 75, 75, 0) 57%, rgba(75, 75, 75, 0) 100%),
+        linear-gradient(135deg, transparent 0%, transparent 43%, var(--grisMedio) 45%, var(--grisMedio) 55%, transparent 57%, transparent 100%);
+}
+
+/*Para la versión DARK*/
+/*
+    background: linear-gradient(45deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 43%, #fff 45%, #fff 55%, rgba(0, 0, 0, 0) 57%, rgba(0, 0, 0, 0) 100%),
+    linear-gradient(135deg, transparent 0%, transparent 43%, #fff 45%, #fff 55%, transparent 57%, transparent 100%);
+    }
+*/
+
+.inputBuscar::-ms-clear {
+    margin-right: 40px
+}
+
+input {
+    outline-width: 0;
+    outline-color: transparent;
+}
+
+.botonBuscar {
+    right: 0;
+    width: 50px;
+    top: 4px;
+    padding: 1em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    transition: right .3s;
+}
+
+.botonBuscar>svg {
+    font-size: 2em;
+    color: var(--gris);
+    transition: .3s;
+}
+
+
+.botonBuscar>svg:hover {
+    color: var(--colorPrincipal);
+}
