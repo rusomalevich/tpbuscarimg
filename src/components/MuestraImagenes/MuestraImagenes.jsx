@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react"
-import './MuestraImagenes.css'
-import axios from "axios"
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 import Masonry from 'react-masonry-css'
-import { BsFillTagFill, BsFillMapFill, BsFillPersonFill, BsFillCameraFill } from "react-icons/bs";
+import './MuestraImagenes.css'
+import { Logo } from '../Logo/Logo'
+import { BusquedaForm } from '../BusquedaForm/BusquedaForm'
+import { BsFillTagFill, BsFillMapFill, BsFillPersonFill, BsFillCameraFill } from "react-icons/bs"
 
 const BASEurl = 'https://api.unsplash.com/'
 const apiKey = 'kGS0Yw08xWCh64TiRy_U421UZRvGQhnmYWYuoIPWAs8'
@@ -13,51 +16,68 @@ const cantidadFotos = '2'
 const MuestraImagenes = ({ busqueda }) => {
     const [imagenes, setImagenes] = useState([])
     const [cargando, setCargando] = useState(false)
+    const [tags, setTags] = useState([])
+    const irA = useNavigate()
 
 
     useEffect(() => {
         const traeImagenes = async () => {
-            setCargando(true);
-            const response = await axios.get(
-                `${BASEurl}${apiSearch}${busqueda}&per_page=${cantidadFotos}&client_id=${apiKey}`
-            );
-            setImagenes(response.data.results);
-            setCargando(false);
+            setCargando(true)
+            const response = await axios.get(`${BASEurl}photos/?per_page=2&client_id=${apiKey}`)
+            //const response = await axios.get(`${BASEurl}${apiSearch}${busqueda}&per_page=${cantidadFotos}&client_id=${apiKey}`)
+            setImagenes(response.data)
+            setCargando(false)
+            setTags(response.data.flatMap(image => image.tags))
             const propLimite = 'x-ratelimit-remaining'
             const limite = response.headers[propLimite]
-            console.log(response)
             console.log(`${limite} consultas disponibles`)
         }
 
-        if (busqueda) {
             traeImagenes()
-        }
-    }, [busqueda])
+
+    }, [])
+
+    const buscarSubmit = async busqueda => {
+        setCargando(true)
+        const response = await axios.get(`${BASEurl}${apiSearch}${busqueda}&per_page=${cantidadFotos}&client_id=${apiKey}`)
+        setImagenes(response.data.results)
+        setCargando(false)
+        const propLimite = 'x-ratelimit-remaining'
+        const limite = response.headers[propLimite]
+        console.log(`${limite} consultas disponibles`)
+    }
 
     const traeDatosFotoAPI = async id => {
         const response = await axios.get(`${BASEurl}photos/${id}?client_id=${apiKey}`)
+        const propLimite = 'x-ratelimit-remaining'
+        const limite = response.headers[propLimite]
+        console.log(`${limite} consultas disponibles`)
         return response.data
     }
 
+    const handleTagClick = tag => {
+        irA(`/search?query=${encodeURIComponent(tag)}`)
+    }
+
     const handleMouseEnter = (imgColor) => {
-        document.body.style.background = imgColor;
-    };
+        document.body.style.background = imgColor
+    }
     const handleMouseLeave = () => {
-        document.body.style.background = "var(--gris)";
-    };
+        document.body.style.background = "var(--gris)"
+    }
 
     const breakpointColumnsObj = {
         default: 4,
         1200: 3,
         900: 2,
         700: 1
-    };
+    }
     
     useEffect(() => {
         const traeDatosFoto = async () => {
             const infoImg = await Promise.all(
                 imagenes.map(async (imagen, i) => {
-                    const datosFoto = await traeDatosFotoAPI(imagen.id);
+                    const datosFoto = await traeDatosFotoAPI(imagen.id)
 
                     return (
                         
@@ -110,7 +130,7 @@ const MuestraImagenes = ({ busqueda }) => {
                                     {datosFoto.tags.map(tag =>
                                         <a
                                             href='#'
-                                            /*onClick={() => setBusqueda(tag.title)}*/
+                                            onClick={() => handleTagClick(tag.title)}
                                             className="etiqueta"
                                             key={`etiqueta${tag.title}${i}`}
                                             id={`etiqueta${tag.title}${i}`}>
@@ -120,29 +140,33 @@ const MuestraImagenes = ({ busqueda }) => {
                                 )}
                             </div>
                         </div>
-                    );
+                    )
                 })
-            );
-            return infoImg;
-        };
+            )
+            return infoImg
+        }
 
         if (imagenes.length > 0) {
             traeDatosFoto().then(infoImg => {
                 setinfoImg(infoImg)
-            });
+            })
         }
-    }, [imagenes]);
+    }, [imagenes])
 
-    const [infoImg, setinfoImg] = useState([]);
+    const [infoImg, setinfoImg] = useState([])
 
-    return <div>
-            <Masonry
-                breakpointCols={breakpointColumnsObj}
-                className="my-masonry-grid"
-                columnClassName="my-masonry-grid_column">
-            {cargando ? <p> cargando...</p> : infoImg}
-            </Masonry>
-            </div>;
-};
+    return (
+            <div className='container'>
+                <Logo />
+                <BusquedaForm onSearchSubmit={buscarSubmit} />
+                <Masonry
+                    breakpointCols={breakpointColumnsObj}
+                    className="my-masonry-grid"
+                    columnClassName="my-masonry-grid_column">
+                {cargando ? <p> cargando...</p> : infoImg}
+                </Masonry>
+            </div>
+    )
+}
 
-export { MuestraImagenes };
+export { MuestraImagenes }
