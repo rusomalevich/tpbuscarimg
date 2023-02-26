@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { BsSearch } from "react-icons/bs"
 
 const BusquedaForm = ({ onSearchSubmit, tags }) => {
+    const [searchParams] = useSearchParams()
+    const query = searchParams.get("query")
     const [busqueda, setBusqueda] = useState('')
     const irA = useNavigate()
 
@@ -26,7 +28,7 @@ const BusquedaForm = ({ onSearchSubmit, tags }) => {
                 name="busqueda"
                 placeholder='Buscar imágenes'
                 className='inputBuscar'
-                value={busqueda}
+                defaultValue={query}
                 onChange={buscaCambioInput}
             />
             <button

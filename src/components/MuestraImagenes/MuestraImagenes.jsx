@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import axios from 'axios'
 import Masonry from 'react-masonry-css'
 import './MuestraImagenes.css'
@@ -16,6 +16,8 @@ const cantidadFotos = '2'
 const MuestraImagenes = ({ busqueda }) => {
     const [imagenes, setImagenes] = useState([])
     const [cargando, setCargando] = useState(false)
+    const [searchParams] = useSearchParams()
+    const query = searchParams.get("query")
     const [tags, setTags] = useState([])
     const irA = useNavigate()
 
@@ -55,8 +57,9 @@ const MuestraImagenes = ({ busqueda }) => {
         return response.data
     }
 
-    const handleTagClick = tag => {
+    const tagClick = tag => {
         irA(`/search?query=${encodeURIComponent(tag)}`)
+        
     }
 
     const handleMouseEnter = (imgColor) => {
@@ -127,15 +130,17 @@ const MuestraImagenes = ({ busqueda }) => {
                                 {datosFoto.tags.length > 0 && (
                                 <div 
                                     className="propiedades etiquetas">
-                                    {datosFoto.tags.map(tag =>
+                                    {datosFoto.tags.map((tag, index) =>
+                                        index < 5 && (
                                         <a
                                             href='#'
-                                            onClick={() => handleTagClick(tag.title)}
+                                            onClick={() => tagClick(tag.title)}
                                             className="etiqueta"
                                             key={`etiqueta${tag.title}${i}`}
                                             id={`etiqueta${tag.title}${i}`}>
-                                            <BsFillTagFill />{tag.title}</a>)}
-                                        
+                                            <BsFillTagFill />{tag.title}</a>))
+                                    }
+  
                                 </div>
                                 )}
                             </div>

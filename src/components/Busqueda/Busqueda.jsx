@@ -54,7 +54,7 @@ const Busqueda = ({ params }) => {
         return response.data
     }
 
-    const handleTagClick = tag => {
+    const tagClick = tag => {
         irA(`/search?query=${encodeURIComponent(tag)}`)
     }
 
@@ -126,14 +126,16 @@ const Busqueda = ({ params }) => {
                                 {datosFoto.tags.length > 0 && (
                                     <div
                                         className="propiedades etiquetas">
-                                        {datosFoto.tags.map(tag =>
+                                        {datosFoto.tags.map((tag, index) =>
+                                            index < 5 && (
                                             <a
                                                 href='#'
-                                                onClick={() => handleTagClick(tag.title)}
+                                                onClick={() => tagClick(tag.title)}
                                                 className="etiqueta"
                                                 key={`etiqueta${tag.title}${i}`}
                                                 id={`etiqueta${tag.title}${i}`}>
-                                                <BsFillTagFill />{tag.title}</a>)}
+                                                <BsFillTagFill />{tag.title}</a>))
+                                            }
 
                                     </div>
                                 )}
