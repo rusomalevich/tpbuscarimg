@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Masonry from 'react-masonry-css'
 import './Busqueda.css'
@@ -20,6 +19,7 @@ const Busqueda = ({ params }) => {
     const [imagenes, setImagenes] = useState([])
     const [cargando, setCargando] = useState(false)
     const irA = useNavigate()
+    const [pagina, setPagina] = useState(1);
 
     const buscarSubmit = async busqueda => {
         setCargando(true)
@@ -58,6 +58,36 @@ const Busqueda = ({ params }) => {
         irA(`/search?query=${encodeURIComponent(tag)}`)
     }
 
+    useEffect(() => {
+        const infinitoImagenes = async () => {
+            setCargando(true)
+
+            const response = await axios.get(`${BASEurl}${apiSearch}${query}&per_page=${cantidadFotos}&client_id=${apiKey}`)
+
+            setImagenes(imagenes => [...imagenes, ...response.data.results]);
+            setCargando(false)
+            const propLimite = 'x-ratelimit-remaining'
+            const limite = response.headers[propLimite]
+            console.log(`${limite} consultas disponibles`)
+        }
+
+        infinitoImagenes()
+
+    }, [pagina])
+
+    const handleScroll = () => {
+        const scrollPos = document.documentElement.scrollTop + window.innerHeight;
+        const scrollHeight = document.documentElement.scrollHeight;
+        if (scrollPos >= scrollHeight && !cargando) {
+            setPagina(pagina => pagina + 1); // cargar la siguiente página de imágenes
+            console.log(pagina)
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     const handleMouseEnter = (imgColor) => {
         document.body.style.background = imgColor

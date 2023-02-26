@@ -4,6 +4,7 @@ import './App.css'
 import { Busqueda } from "./components/Busqueda/Busqueda"
 import { MuestraImagenes } from "./components/MuestraImagenes/MuestraImagenes"
 
+
 const App = () => {
 
   return (

@@ -7,6 +7,7 @@ import { Logo } from '../Logo/Logo'
 import { BusquedaForm } from '../BusquedaForm/BusquedaForm'
 import { BsFillTagFill, BsFillMapFill, BsFillPersonFill, BsFillCameraFill } from "react-icons/bs"
 
+
 const BASEurl = 'https://api.unsplash.com/'
 const apiKey = 'kGS0Yw08xWCh64TiRy_U421UZRvGQhnmYWYuoIPWAs8'
 const apiSearch = 'search/photos?query='
@@ -20,14 +21,19 @@ const MuestraImagenes = ({ busqueda }) => {
     const query = searchParams.get("query")
     const [tags, setTags] = useState([])
     const irA = useNavigate()
+    const [pagina, setPagina] = useState(1);
+
 
 
     useEffect(() => {
         const traeImagenes = async () => {
             setCargando(true)
-            const response = await axios.get(`${BASEurl}photos/?per_page=2&client_id=${apiKey}`)
+            //const response = await axios.get(`${BASEurl}photos/?per_page=2&client_id=${apiKey}`)
+            const response = await axios.get(`${BASEurl}photos/?per_page=2&page=${pagina}&client_id=${apiKey}`);
             //const response = await axios.get(`${BASEurl}${apiSearch}${busqueda}&per_page=${cantidadFotos}&client_id=${apiKey}`)
-            setImagenes(response.data)
+
+            //setImagenes(response.data)
+            setImagenes(imagenes => [...imagenes, ...response.data]);
             setCargando(false)
             setTags(response.data.flatMap(image => image.tags))
             const propLimite = 'x-ratelimit-remaining'
@@ -37,7 +43,21 @@ const MuestraImagenes = ({ busqueda }) => {
 
             traeImagenes()
 
-    }, [])
+    }, [pagina])
+
+    const handleScroll = () => {
+        const scrollPos = document.documentElement.scrollTop + window.innerHeight;
+        const scrollHeight = document.documentElement.scrollHeight;
+        console.log(scrollHeight)
+        if (scrollPos >= scrollHeight && !cargando) {
+            setPagina(pagina => pagina + 1); // cargar la siguiente página de imágenes
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     const buscarSubmit = async busqueda => {
         setCargando(true)
