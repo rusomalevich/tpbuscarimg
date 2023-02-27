@@ -11,7 +11,7 @@ import LazyLoad from 'react-lazy-load'
 const BASEurl = 'https://api.unsplash.com/'
 const apiKey = 'htnGW05HKp9aqvSG7TeuzSrAt5BSWCRqhQzfjv04XOs'
 const apiSearch = 'search/photos?query='
-const cantidadFotos = '3'
+const cantidadFotos = '5'
 
 const Busqueda = ({ params }) => {
     const [searchParams] = useSearchParams()
