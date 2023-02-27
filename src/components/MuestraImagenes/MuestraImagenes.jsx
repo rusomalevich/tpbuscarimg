@@ -4,6 +4,7 @@ import axios from 'axios'
 import Masonry from 'react-masonry-css'
 import './MuestraImagenes.css'
 import { Logo } from '../Logo/Logo'
+import { Loader } from '../Loader/Loader'
 import { BusquedaForm } from '../BusquedaForm/BusquedaForm'
 import { BsFillTagFill, BsFillMapFill, BsFillPersonFill, BsFillCameraFill } from "react-icons/bs"
 import LazyLoad from 'react-lazy-load'
@@ -174,7 +175,7 @@ const MuestraImagenes = ({ busqueda }) => {
                     breakpointCols={breakpointColumnsObj}
                     className="my-masonry-grid"
                     columnClassName="my-masonry-grid_column">
-                {cargando ? <p> cargando...</p> : infoImg}
+                {cargando ? <Loader /> : infoImg}
                 </Masonry>
             </div>
     )
