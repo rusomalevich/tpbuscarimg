@@ -6,13 +6,12 @@ import './MuestraImagenes.css'
 import { Logo } from '../Logo/Logo'
 import { BusquedaForm } from '../BusquedaForm/BusquedaForm'
 import { BsFillTagFill, BsFillMapFill, BsFillPersonFill, BsFillCameraFill } from "react-icons/bs"
-
+import LazyLoad from 'react-lazy-load'
 
 const BASEurl = 'https://api.unsplash.com/'
 const apiKey = 'kGS0Yw08xWCh64TiRy_U421UZRvGQhnmYWYuoIPWAs8'
 const apiSearch = 'search/photos?query='
-const apiRandom = 'photos/random?'//https://api.unsplash.com/photos/random?count=5
-const cantidadFotos = '2'
+const cantidadFotos = '7'
 
 const MuestraImagenes = ({ busqueda }) => {
     const [imagenes, setImagenes] = useState([])
@@ -23,34 +22,26 @@ const MuestraImagenes = ({ busqueda }) => {
     const irA = useNavigate()
     const [pagina, setPagina] = useState(1);
 
-
-
     useEffect(() => {
         const traeImagenes = async () => {
             setCargando(true)
-            //const response = await axios.get(`${BASEurl}photos/?per_page=2&client_id=${apiKey}`)
             const response = await axios.get(`${BASEurl}photos/?per_page=2&page=${pagina}&client_id=${apiKey}`);
-            //const response = await axios.get(`${BASEurl}${apiSearch}${busqueda}&per_page=${cantidadFotos}&client_id=${apiKey}`)
-
-            //setImagenes(response.data)
             setImagenes(imagenes => [...imagenes, ...response.data]);
             setCargando(false)
             setTags(response.data.flatMap(image => image.tags))
-            const propLimite = 'x-ratelimit-remaining'
-            const limite = response.headers[propLimite]
-            console.log(`${limite} consultas disponibles`)
-        }
 
+        }
             traeImagenes()
 
     }, [pagina])
 
     const handleScroll = () => {
-        const scrollPos = document.documentElement.scrollTop + window.innerHeight;
+        const scrollPos = document.documentElement.scrollTop + window.innerHeight +1;
         const scrollHeight = document.documentElement.scrollHeight;
-        console.log(scrollHeight)
         if (scrollPos >= scrollHeight && !cargando) {
-            setPagina(pagina => pagina + 1); // cargar la siguiente página de imágenes
+            if (pagina < 2) {
+                setPagina(pagina => pagina + 1);
+            }
         }
     };
 
@@ -64,22 +55,15 @@ const MuestraImagenes = ({ busqueda }) => {
         const response = await axios.get(`${BASEurl}${apiSearch}${busqueda}&per_page=${cantidadFotos}&client_id=${apiKey}`)
         setImagenes(response.data.results)
         setCargando(false)
-        const propLimite = 'x-ratelimit-remaining'
-        const limite = response.headers[propLimite]
-        console.log(`${limite} consultas disponibles`)
     }
 
     const traeDatosFotoAPI = async id => {
         const response = await axios.get(`${BASEurl}photos/${id}?client_id=${apiKey}`)
-        const propLimite = 'x-ratelimit-remaining'
-        const limite = response.headers[propLimite]
-        console.log(`${limite} consultas disponibles`)
         return response.data
     }
 
     const tagClick = tag => {
         irA(`/search?query=${encodeURIComponent(tag)}`)
-        
     }
 
     const handleMouseEnter = (imgColor) => {
@@ -111,10 +95,12 @@ const MuestraImagenes = ({ busqueda }) => {
                             onMouseEnter={() => handleMouseEnter(imagen.color)}
                             onMouseLeave={handleMouseLeave}
                         >
+                            <LazyLoad once>
                             <img
                                 src={imagen.urls.small_s3}
                                 alt={imagen.description}
                                 className='foto'/>
+                            </LazyLoad>
                             <div
                                 className="datosFoto">
                                 {imagen.user.location && (<div 

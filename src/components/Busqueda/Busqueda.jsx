@@ -6,12 +6,12 @@ import './Busqueda.css'
 import { Logo } from '../Logo/Logo'
 import { BusquedaForm } from '../BusquedaForm/BusquedaForm'
 import { BsFillTagFill, BsFillMapFill, BsFillPersonFill, BsFillCameraFill } from "react-icons/bs"
+import LazyLoad from 'react-lazy-load'
 
 const BASEurl = 'https://api.unsplash.com/'
 const apiKey = 'kGS0Yw08xWCh64TiRy_U421UZRvGQhnmYWYuoIPWAs8'
 const apiSearch = 'search/photos?query='
-const apiRandom = 'photos/random?'//https://api.unsplash.com/photos/random?count=5
-const cantidadFotos = '2'
+const cantidadFotos = '7'
 
 const Busqueda = ({ params }) => {
     const [searchParams] = useSearchParams()
@@ -23,27 +23,17 @@ const Busqueda = ({ params }) => {
 
     const buscarSubmit = async busqueda => {
         setCargando(true)
-        //const response = await axios.get(`https://api.unsplash.com/search/photos?query=${busqueda}&client_id=YOUR_ACCESS_KEY`)
-        const response = await axios.get(
-            `${BASEurl}${apiSearch}${busqueda}&per_page=${cantidadFotos}&client_id=${apiKey}`
-        )
+        const response = await axios.get(`${BASEurl}${apiSearch}${busqueda}&per_page=${cantidadFotos}&client_id=${apiKey}`)
         setImagenes(response.data.results)
         setCargando(false)
-        const propLimite = 'x-ratelimit-remaining'
-        const limite = response.headers[propLimite]
-        console.log(`${limite} consultas disponibles`)
     }
 
     useEffect(() => {
         const traeImagenes = async () => {
             setCargando(true)
-            //const response = await axios.get(`https://api.unsplash.com/search/photos?query=${query}&client_id=YOUR_ACCESS_KEY`)
             const response = await axios.get(`${BASEurl}${apiSearch}${query}&per_page=${cantidadFotos}&client_id=${apiKey}`)
             setImagenes(response.data.results)
             setCargando(false)
-            const propLimite = 'x-ratelimit-remaining'
-            const limite = response.headers[propLimite]
-            console.log(`${limite} consultas disponibles`)
         }
 
         traeImagenes()
@@ -61,26 +51,22 @@ const Busqueda = ({ params }) => {
     useEffect(() => {
         const infinitoImagenes = async () => {
             setCargando(true)
-
-            const response = await axios.get(`${BASEurl}${apiSearch}${query}&per_page=${cantidadFotos}&client_id=${apiKey}`)
-
+            const response = await axios.get(`${BASEurl}${apiSearch}${query}&per_page=${cantidadFotos}&page=${pagina}&client_id=${apiKey}`)
             setImagenes(imagenes => [...imagenes, ...response.data.results]);
             setCargando(false)
-            const propLimite = 'x-ratelimit-remaining'
-            const limite = response.headers[propLimite]
-            console.log(`${limite} consultas disponibles`)
         }
 
         infinitoImagenes()
 
-    }, [pagina])
+    }, [query, pagina])
 
     const handleScroll = () => {
         const scrollPos = document.documentElement.scrollTop + window.innerHeight;
         const scrollHeight = document.documentElement.scrollHeight;
         if (scrollPos >= scrollHeight && !cargando) {
-            setPagina(pagina => pagina + 1); // cargar la siguiente página de imágenes
-            console.log(pagina)
+            if(pagina<2){
+                setPagina(pagina => pagina + 1); // cargar la siguiente página de imágenes
+            }
         }
     };
 
@@ -107,6 +93,7 @@ const Busqueda = ({ params }) => {
         const traeDatosFoto = async () => {
             const infoImg = await Promise.all(
                 imagenes.map(async (imagen, i) => {
+
                     const datosFoto = await traeDatosFotoAPI(imagen.id)
 
                     return (
@@ -117,10 +104,12 @@ const Busqueda = ({ params }) => {
                             onMouseEnter={() => handleMouseEnter(imagen.color)}
                             onMouseLeave={handleMouseLeave}
                         >
+                            <LazyLoad once>
                             <img
                                 src={imagen.urls.small_s3}
                                 alt={imagen.description}
                                 className='foto' />
+                            </LazyLoad>
                             <div
                                 className="datosFoto">
                                 {imagen.user.location && (<div
@@ -128,6 +117,7 @@ const Busqueda = ({ params }) => {
                                     <p><BsFillMapFill /> {imagen.user.location}</p>
                                 </div>
                                 )}
+
                                 {datosFoto.exif && datosFoto.exif.model && (
                                     <div
                                         className="propiedades">
@@ -191,7 +181,7 @@ const Busqueda = ({ params }) => {
     return (
         <div className='container'>
             <Logo />
-            <BusquedaForm onSearchSubmit={buscarSubmit} />
+            <BusquedaForm onSearchSubmit={buscarSubmit} defaultValue={query} />
             <Masonry
                 breakpointCols={breakpointColumnsObj}
                 className="my-masonry-grid"
