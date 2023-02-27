@@ -9,9 +9,9 @@ import { BsFillTagFill, BsFillMapFill, BsFillPersonFill, BsFillCameraFill } from
 import LazyLoad from 'react-lazy-load'
 
 const BASEurl = 'https://api.unsplash.com/'
-const apiKey = 'kGS0Yw08xWCh64TiRy_U421UZRvGQhnmYWYuoIPWAs8'
+const apiKey = 'htnGW05HKp9aqvSG7TeuzSrAt5BSWCRqhQzfjv04XOs'
 const apiSearch = 'search/photos?query='
-const cantidadFotos = '7'
+const cantidadFotos = '3'
 
 const Busqueda = ({ params }) => {
     const [searchParams] = useSearchParams()
