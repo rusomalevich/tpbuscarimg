@@ -1,5 +1,5 @@
 # Fotito
-Trabajo Práctico de React de la Diplomatura en Programador Web Full Stack realizado por Ezequiel Glikman.
+__Fotito__ Trabajo Práctico de React de la Diplomatura en Programador Web Full Stack realizado por Ezequiel Glikman.
 
 <p>Esta web permite buscar imágenes en la plataforma Unsplash y conocer diversos datos sobre cada fotografía: autor, ubicación y cámara con la que fue tomada (en caso de que el autor haya proporcioado esa información).</p>
 <p>También permite navegar entre etiquetas.</p>
