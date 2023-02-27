@@ -25,7 +25,7 @@ const MuestraImagenes = ({ busqueda }) => {
     useEffect(() => {
         const traeImagenes = async () => {
             setCargando(true)
-            const response = await axios.get(`${BASEurl}photos/?per_page=2&page=${pagina}&client_id=${apiKey}`);
+            const response = await axios.get(`${BASEurl}photos/?per_page=5&page=${pagina}&client_id=${apiKey}`);
             setImagenes(imagenes => [...imagenes, ...response.data]);
             setCargando(false)
             setTags(response.data.flatMap(image => image.tags))
